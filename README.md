@@ -1,6 +1,8 @@
 # FlightScraper
-Get the tracking information from [NCA](https://www.nca.aero/icoportal/jsp/operations/shipment/AWBTracking.jsf)
+Get the tracking information from
 
+- [NCA](https://www.nca.aero/icoportal/jsp/operations/shipment/AWBTracking.jsf)
+- [ANA](https://cargo.ana.co.jp/anaicoportal/portal/loginFlow)
 
 ## Usage
 
@@ -10,10 +12,10 @@ Get the tracking information from [NCA](https://www.nca.aero/icoportal/jsp/opera
       POSTGRES_URI = YOUR_POSTGRESQL_URI
       ```
 
-2. Execute the following command for scrape the data from [NCA](https://www.nca.aero/icoportal/jsp/operations/shipment/AWBTracking.jsf).  
+2. Execute the following command for scrape the data.  
 
       ```
-      scrapy crawl -a ID=AWB_NUMBER [-o OUTPUT_FILE]
+      scrapy crawl -a [ana/nca] ID=AWB_NUMBER [-o OUTPUT_FILE]
       ```
 
 
