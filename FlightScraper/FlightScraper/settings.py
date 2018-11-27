@@ -77,7 +77,6 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'FlightScraper.pipelines.ValidationPipeline': 100,
-    'FlightScraper.pipelines.ConversionPipeline': 200,
     'FlightScraper.pipelines.PostgresPipeline': 300,
 }
 

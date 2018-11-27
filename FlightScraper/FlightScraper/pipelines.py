@@ -12,7 +12,7 @@ class ValidationPipeline(object):
         return item
 
 
-class ConversionPipeline(object):
+class NcaConversionPipeline(object):
     def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
         year = dt.datetime.now().year
         item['date'] = dt.datetime.strptime(item['date'],
@@ -25,6 +25,24 @@ class ConversionPipeline(object):
                                            "%d%b %H:%M").replace(year)
         item['ata'] = dt.datetime.strptime(item['ata'],
                                            "%d%b %H:%M").replace(year)
+        return item
+
+
+class AnaConversionPipeline(object):
+    def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
+        year = dt.datetime.now().year
+        item['date'] = dt.datetime.strptime(item['date'],
+                                            "%d-%b").replace(year)
+        item['std'] = dt.datetime.strptime(item['std'],
+                                           "%d-%b %Y | %H:%M")
+        item['sta'] = dt.datetime.strptime(item['sta'],
+                                           "%d-%b %Y | %H:%M")
+        item['atd'] = dt.datetime.strptime(item['atd'],
+                                           "%d-%b %Y | %H:%M")
+        item['ata'] = dt.datetime.strptime(item['ata'],
+                                           "%d-%b %Y | %H:%M")
+        item['weight'] = item['weight'].replace('Kg', '').strip()
+        item['pieces'] = item['pieces'].replace('Pcs.', '').strip()
         return item
 
 
