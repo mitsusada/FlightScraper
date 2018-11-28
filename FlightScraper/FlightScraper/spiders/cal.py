@@ -55,7 +55,7 @@ class CalSpider(scrapy.Spider):
 
         # Get values
         item = FlightscraperItem()
-        item['cargo_number'] = int('933' + self.ID)
+        item['cargo_number'] = int('297' + self.ID)
         item['flight'] = flight
         item['date'] = date
         item['departure'] = dep

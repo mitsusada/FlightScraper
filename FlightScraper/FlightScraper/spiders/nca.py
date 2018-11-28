@@ -35,7 +35,7 @@ class NcaSpider(scrapy.Spider):
 
         # Get values
         item = FlightscraperItem()
-        item['cargo_number'] = self.ID
+        item['cargo_number'] = int('933' + self.ID)
         item['flight'] = response.meta['driver'].find_element_by_css_selector(
             '#shipmentTracking\:trckingDetails\:_idJsp65\:0\:FlightValue').text
         item['date'] = response.meta['driver'].find_element_by_css_selector(

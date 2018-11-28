@@ -72,7 +72,7 @@ class AnaSpider(scrapy.Spider):
         date = std.split(' ')[0]
 
         item = FlightscraperItem()
-        item['cargo_number'] = self.ID
+        item['cargo_number'] = int('205' + self.ID)
         item['flight'] = flight
         item['date'] = date
         item['departure'] = dep
