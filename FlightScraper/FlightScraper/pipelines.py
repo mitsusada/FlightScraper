@@ -46,6 +46,23 @@ class AnaConversionPipeline(object):
         return item
 
 
+class CalConversionPipeline(object):
+    def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
+        year = dt.datetime.now().year
+        item['date'] = dt.datetime.strptime(item['date'],
+                                            "%d%b").replace(year)
+        item['std'] = dt.datetime.strptime(item['std'].replace('(ATDL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['sta'] = dt.datetime.strptime(item['sta'].replace('(ATAL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['atd'] = dt.datetime.strptime(item['atd'].replace('(ATDL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['ata'] = dt.datetime.strptime(item['ata'].replace('(ATAL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['weight'] = item['weight'].replace('KG', '').strip()
+        return item
+
+
 class PostgresPipeline(object):
     def open_spider(self, spider: scrapy.Spider):
         uri = spider.settings.get('POSTGRESQL_URI')
