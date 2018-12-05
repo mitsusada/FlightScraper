@@ -9,10 +9,6 @@ class CalSpider(scrapy.Spider):
     allowed_domains = ['cargo.china-airlines.com']
     start_url = 'http://cargo.china-airlines.com/CCNetv2/' \
                 'content/manage/ShipmentTracking.aspx/'
-    custom_settings = {'ITEM_PIPELINES': {
-                           'FlightScraper.pipelines.CalConversionPipeline': 200,
-                           }
-                       }
 
     def start_requests(self):
         yield SeleniumRequest(

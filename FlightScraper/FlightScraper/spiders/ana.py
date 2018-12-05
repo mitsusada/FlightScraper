@@ -11,10 +11,6 @@ class AnaSpider(scrapy.Spider):
     name = 'ana'
     allowed_domains = ['cargo.ana.co.jp']
     start_url = 'https://cargo.ana.co.jp/anaicoportal/portal/loginFlow/'
-    custom_settings = {'ITEM_PIPELINES': {
-                           'FlightScraper.pipelines.AnaConversionPipeline': 200,
-                           }
-                       }
 
     def start_requests(self):
         yield SeleniumRequest(

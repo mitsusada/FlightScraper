@@ -9,10 +9,6 @@ class NcaSpider(scrapy.Spider):
     allowed_domains = ['www.nca.aero']
     start_url = 'https://www.nca.aero/icoportal/jsp/operations/shipment/' \
                 'AWBTracking.jsf'
-    custom_settings = {'ITEM_PIPELINES': {
-                           'FlightScraper.pipelines.NcaConversionPipeline': 200,
-                           }
-                       }
 
     def start_requests(self):
         yield SeleniumRequest(

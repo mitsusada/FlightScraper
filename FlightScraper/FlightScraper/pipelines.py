@@ -9,11 +9,14 @@ class ValidationPipeline(object):
     def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
         if item['cargo_number'] is False:
             raise scrapy.exceptions.DropItem('Missing value: title')
-        return item
+        else:
+            return item
 
 
 class NcaConversionPipeline(object):
     def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
+        if spider.name not in ['nca']:
+            return item
         year = dt.datetime.now().year
         item['date'] = dt.datetime.strptime(item['date'],
                                             "%d%b").replace(year)
@@ -30,6 +33,8 @@ class NcaConversionPipeline(object):
 
 class AnaConversionPipeline(object):
     def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
+        if spider.name not in ['ana']:
+            return item
         year = dt.datetime.now().year
         item['date'] = dt.datetime.strptime(item['date'],
                                             "%d-%b").replace(year)
@@ -48,6 +53,31 @@ class AnaConversionPipeline(object):
 
 class CalConversionPipeline(object):
     def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
+        if spider.name not in ['cal']:
+            return item
+        year = dt.datetime.now().year
+        item['date'] = dt.datetime.strptime(item['date'],
+                                            "%d%b").replace(year)
+        item['std'] = dt.datetime.strptime(item['std'].replace('(ATDL)',
+                                           '').replace('(ETDL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['sta'] = dt.datetime.strptime(item['sta'].replace('(ATAL)',
+                                           '').replace('(ETAL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['atd'] = dt.datetime.strptime(item['atd'].replace('(ATDL)',
+                                           '').replace('(ETDL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['ata'] = dt.datetime.strptime(item['ata'].replace('(ATAL)',
+                                           '').replace('(ETAL)', ''),
+                                           "%d%b %H:%M").replace(year)
+        item['weight'] = item['weight'].replace('KG', '').strip()
+        return item
+
+
+class JalConversionPipeline(object):
+    def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
+        if spider.name not in ['jal']:
+            return item
         year = dt.datetime.now().year
         item['date'] = dt.datetime.strptime(item['date'],
                                             "%d%b").replace(year)
@@ -59,7 +89,7 @@ class CalConversionPipeline(object):
                                            "%d%b %H:%M").replace(year)
         item['ata'] = dt.datetime.strptime(item['ata'].replace('(ATAL)', ''),
                                            "%d%b %H:%M").replace(year)
-        item['weight'] = item['weight'].replace('KG', '').strip()
+        item['weight'] = item['weight'].replace('KGS', '').strip()
         return item
 
 
@@ -72,12 +102,11 @@ class PostgresPipeline(object):
         self.conn.close()
 
     def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
-        sql = "INSERT INTO cargo_info (cargo_number, flight, date, "\
-              "departure, arrival, pieces, weight, std, sta, atd, "\
-              "ata) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "UPDATE cargo_info SET flight=%s, date=%s, "\
+              "departure=%s, arrival=%s, pieces=%s, weight=%s, std=%s, "\
+              "sta=%s, atd=%s, ata=%s WHERE cargo_number=%s"
         curs = self.conn.cursor()
-        curs.execute(sql, (item['cargo_number'],
-                           item['flight'],
+        curs.execute(sql, (item['flight'],
                            item['date'],
                            item['departure'],
                            item['arrival'],
@@ -87,6 +116,7 @@ class PostgresPipeline(object):
                            item['sta'],
                            item['atd'],
                            item['ata'],
+                           item['cargo_number'],
                            ))
         self.conn.commit()
         return item
