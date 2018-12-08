@@ -56,7 +56,7 @@ class JalSpider(scrapy.Spider):
             if 'Actual Time' in latest[4] else None
         date = oldest[2][6:]
         item = FlightscraperItem()
-        item['cargo_number'] = int('131' + self.ID)
+        item['cargo_number'] = int('160' + self.ID)
         item['flight'] = flight
         item['departure'] = dep
         item['arrival'] = arr
