@@ -93,6 +93,29 @@ class JalConversionPipeline(object):
         return item
 
 
+class CpaConversionPipeline(object):
+    def process_item(self, item: scrapy.Item, spider: scrapy.Spider):
+        if spider.name not in ['cpa']:
+            return item
+        year = dt.datetime.now().year
+        item['date'] = dt.datetime.strptime(item['date'],
+                                            "%d %b").replace(year)
+        if item['std'] is not None:
+            item['std'] = dt.datetime.strptime(item['std'],
+                                               "%d %b %Y%H:%M")
+        if item['sta'] is not None:
+            item['sta'] = dt.datetime.strptime(item['sta'],
+                                               "%d %b %Y%H:%M")
+        if item['atd'] is not None:
+            item['atd'] = dt.datetime.strptime(item['atd'],
+                                               "%d %b %Y%H:%M")
+        if item['ata'] is not None:
+            item['ata'] = dt.datetime.strptime(item['ata'],
+                                               "%d %b %Y%H:%M")
+        item['weight'] = item['weight'].replace('kg', '').strip()
+        return item
+
+
 class PostgresPipeline(object):
     def open_spider(self, spider: scrapy.Spider):
         uri = spider.settings.get('POSTGRESQL_URI')

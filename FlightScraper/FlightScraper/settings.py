@@ -81,6 +81,7 @@ ITEM_PIPELINES = {
     'FlightScraper.pipelines.JalConversionPipeline': 201,
     'FlightScraper.pipelines.AnaConversionPipeline': 202,
     'FlightScraper.pipelines.NcaConversionPipeline': 203,
+    'FlightScraper.pipelines.CpaConversionPipeline': 203,
     'FlightScraper.pipelines.PostgresPipeline': 300,
 }
 
