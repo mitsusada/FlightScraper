@@ -5,10 +5,10 @@ from logger import setup_logzero
 
 logger = setup_logzero("./log.txt", "INFO")
 
-app = Celery("celery",
+app = Celery("app",
              broker="redis://localhost",
              backend="redis://localhost",
-             include="app.tasks")
+             )
 
 
 class Config:
@@ -16,8 +16,8 @@ class Config:
     result_serializer = 'json'
     accept_content = ['json']
     timezone = 'Asia/Tokyo'
-    enable_utc = True,
     worker_max_tasks_per_child = 1,
+    enable_utc = True,
     beat_schedule = {
             'run-every-3-minutes': {
                 'task': 'tasks.scrapy_run_crawl',
@@ -27,7 +27,6 @@ class Config:
 
 
 app.config_from_object(Config)
-app.autodiscover_tasks(['FlightScraper.tasks'], force=True)
 
 
 if __name__ == "__main__":
